@@ -111,11 +111,24 @@ function Player({ source }) {
 }
 
 export default function Music() {
+  // Список треков с заголовками и путями
+  const tracks = [
+    { title: 'Расслабление', file: require('../assets/music1.mp3') },
+    { title: 'Спокойствие',  file: require('../assets/music2.mp3') },
+    { title: 'Лесной дождь',        file: require('../assets/rain.mp3') },
+    { title: 'Звуки природы',      file: require('../assets/nature.mp3') },
+    { title: 'Морской бриз',         file: require('../assets/sea.mp3') },
+  ];
+
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Музыка под ваше настроение</Text>
-      <Player source={require('../assets/music1.mp3')} />
-      <Player source={require('../assets/music2.mp3')} />
+      {tracks.map((t, i) => (
+        <View key={i} style={{ width: '100%', alignItems: 'center' }}>
+          <Text style={styles.trackTitle}>{t.title}</Text>
+          <Player source={t.file} />
+        </View>
+      ))}
     </View>
   );
 }
@@ -143,7 +156,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     width: SCREEN_WIDTH * 0.9,
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(234, 216, 192, 1)',
     borderRadius: 25,
     paddingHorizontal: 12,
     paddingVertical: 6,
@@ -165,5 +178,11 @@ const styles = StyleSheet.create({
   progress: {
     flex: 1,
     height: 20
+  },
+  trackTitle: {
+    color: 'rgb(93, 74, 57)',
+    fontSize: 14,
+    fontWeight: '500',
+    marginTop: 10,
   }
 });
