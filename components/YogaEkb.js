@@ -14,7 +14,7 @@ export default function MainCards() {
     {
       key: '1',
       title: 'Занимаемся йогой вместе',
-      subtitle: 'Группы и чаты в VK для занятия йогой в Екатеринбурге',
+      subtitle: 'Группы в VK для занятия йогой в Екатеринбурге',
       image: require('./vkk.jpg'),
       links: [
         'https://vk.me/join/OtfCMsEt3L9GOJ_lEdWS6mdKFG/MPHlctW8=',
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
   },
   button: {
-    backgroundColor: 'gray',
+    backgroundColor: 'rgb(234, 216, 192)',
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 20,

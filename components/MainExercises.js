@@ -1,228 +1,170 @@
-import React from 'react';
-import { Video } from 'expo-av';
-import * as ScreenOrientation from 'expo-screen-orientation';
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+import React, { useState, useRef } from 'react';
+import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
+import { Video, ResizeMode } from 'expo-av';
 
-export default function MainExercises() {
-  const videoItems = [
-    { key: '1', title: 'Утренняя йога-зарядка', source: require('./video1.mp4') },
-    { key: '2', title: 'Мягкая расстяжка на всё тело', source: require('./video2.mp4') },
-    { key: '3', title: 'Вечерняя йога для расслабления', source: require('./video3.mp4') },
+const VideoApp = () => {
+  const [activeFilter, setActiveFilter] = useState('Все');
+  const videoRefs = useRef({});
+
+  // Данные для фильтров с иконками (русские названия)
+  const filters = [
+    { id: 'Все', label: 'Все', icon: require('../assets/icons/calm.png') },
+    { id: 'Утро', label: 'Утро', icon: require('../assets/icons/relax.png') },
+    { id: 'Вечер', label: 'Вечер', icon: require('../assets/icons/focus.png') },
+    { id: 'Растяжка', label: 'Растяжка', icon: require('../assets/icons/anxious.png') }
   ];
 
-  const videoRefs = {
-    '1': React.useRef(null),
-    '2': React.useRef(null),
-    '3': React.useRef(null),
-  };
-  const [statuses, setStatuses] = React.useState({});
-
-  // filter: 'all' | 'morning' | 'stretch' | 'evening'
-  const [filter, setFilter] = React.useState('all');
-
-  const filteredItems = React.useMemo(() => {
-    if (filter === 'morning') {
-      return videoItems.filter(item => item.key === '1');
-    }
-    if (filter === 'stretch') {
-      return videoItems.filter(item => item.key === '2');
-    }
-    if (filter === 'evening') {
-      return videoItems.filter(item => item.key === '3');
-    }
-    // 'all'
-    return videoItems;
-  }, [filter]);
-
-  const onFullscreenUpdate = async ({ fullscreenUpdate }) => {
-    switch (fullscreenUpdate) {
-      case Video.FULLSCREEN_UPDATE_PLAYER_DID_PRESENT:
-        await ScreenOrientation.unlockAsync();
-        break;
-      case Video.FULLSCREEN_UPDATE_PLAYER_WILL_DISMISS:
-        await ScreenOrientation.lockAsync(
-          ScreenOrientation.OrientationLock.PORTRAIT
-        );
-        break;
-    }
+  // Данные для видео
+  const videoContent = {
+    'Все': [
+      { id: '1', title: "Утренняя медитация", source: require('../components/video1.mp4') },
+      { id: '2', title: "Дыхательные практики", source: require('../components/video2.mp4') },
+      { id: '3', title: "Вечерний релакс", source: require('../components/video3.mp4') }
+    ],
+    'Утро': [
+      { id: '4', title: "Утренний комплекс", source: require('../components/video1.mp4') }
+    ],
+    'Вечер': [
+      { id: '5', title: "Вечерняя йога", source: require('../components/video2.mp4') }
+    ],
+    'Растяжка': [
+      { id: '6', title: "Растяжка для начинающих", source: require('../components/video3.mp4') }
+    ]
   };
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <View style={styles.header}>
-        <Text style={styles.headerText}>Добро пожаловать!</Text>
-        <Text style={styles.headerText}>Как Вы сегодня себя чувствуете?</Text>
+    <ScrollView 
+      style={styles.container}
+      contentContainerStyle={styles.scrollContent}
+    >
+      {/* Приветствие */}
+      <Text style={styles.header}>Добро пожаловать!</Text>
+      <Text style={styles.subheader}>Как вы себя сегодня чувствуете?</Text>
 
-        {/* Кнопки фильтрации */}
-        <View style={styles.buttonGroup}>
+      {/* Разделительная линия */}
+      <View style={styles.divider} />
+
+      {/* Фильтры с иконками */}
+      <View style={styles.filtersContainer}>
+        {filters.map(filter => (
           <TouchableOpacity
-            style={[
-              styles.filterButton,
-              filter === 'all' && styles.filterButtonActive,
-            ]}
-            onPress={() => setFilter('all')}
+            key={filter.id}
+            style={styles.filterButton}
+            onPress={() => setActiveFilter(filter.id)}
           >
-            <Text
+            <Image 
+              source={filter.icon} 
               style={[
-                styles.filterText,
-                filter === 'all' && styles.filterTextActive,
+                styles.filterIcon,
+                activeFilter === filter.id && styles.filterIconActive
               ]}
-            >
-              Все
+            />
+            <Text style={[
+              styles.filterText,
+              activeFilter === filter.id && styles.activeFilterText
+            ]}>
+              {filter.label}
             </Text>
           </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.filterButton,
-              filter === 'morning' && styles.filterButtonActive,
-            ]}
-            onPress={() => setFilter('morning')}
-          >
-            <Text
-              style={[
-                styles.filterText,
-                filter === 'morning' && styles.filterTextActive,
-              ]}
-            >
-              Утро
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.filterButton,
-              filter === 'evening' && styles.filterButtonActive,
-            ]}
-            onPress={() => setFilter('evening')}
-          >
-            <Text
-              style={[
-                styles.filterText,
-                filter === 'evening' && styles.filterTextActive,
-              ]}
-            >
-              Вечер
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.filterButton,
-              filter === 'stretch' && styles.filterButtonActive,
-            ]}
-            onPress={() => setFilter('stretch')}
-          >
-            <Text
-              style={[
-                styles.filterText,
-                filter === 'stretch' && styles.filterTextActive,
-              ]}
-            >
-              Растяжка
-            </Text>
-          </TouchableOpacity>
-        </View>
+        ))}
       </View>
 
-      {filteredItems.map((item, idx) => (
-        <React.Fragment key={item.key}>
-          <View style={styles.card}>
-            <Text style={styles.cardTitle}>{item.title}</Text>
+      {/* Разделительная линия */}
+      <View style={styles.divider} />
+
+      {/* Список видео */}
+      <View style={styles.videoList}>
+        {videoContent[activeFilter].map(video => (
+          <View key={video.id} style={styles.videoContainer}>
             <Video
-              ref={videoRefs[item.key]}
-              style={styles.video}
-              source={item.source}
+              ref={ref => videoRefs.current[video.id] = ref}
+              source={video.source}
+              style={styles.videoPlayer}
               useNativeControls
-              resizeMode="contain"
-              isLooping
-              onPlaybackStatusUpdate={status =>
-                setStatuses(prev => ({ ...prev, [item.key]: status }))
-              }
-              onFullscreenUpdate={onFullscreenUpdate}
+              resizeMode={ResizeMode.CONTAIN}
+              shouldPlay={false}
             />
+            <Text style={styles.videoTitle}>{video.title}</Text>
           </View>
-          {idx < filteredItems.length - 1 && (
-            <View style={styles.separator} />
-          )}
-        </React.Fragment>
-      ))}
+        ))}
+      </View>
     </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: 'rgba(255,244,229,1)' },
-  content: { paddingVertical: 20 },
-
-  header: { marginBottom: 20 },
-  headerText: {
-    textAlign: 'center',
-    fontSize: 16,
-    fontWeight: '600',
-    color: 'rgba(93,74,57,1)',
-    marginVertical: 4,
+  container: {
+    flex: 1,
+    backgroundColor: '#FFF4E5'
   },
-
-  buttonGroup: {
+  scrollContent: {
+    padding: 20,
+    paddingBottom: 40
+  },
+  header: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 5,
+    color: '#5D4A39'
+  },
+  subheader: {
+    fontSize: 16,
+    textAlign: 'center',
+    color: '#5D4A39',
+    marginBottom: 20
+  },
+  divider: {
+    height: 1,
+    backgroundColor: '#e0e0e0',
+    marginVertical: 15
+  },
+  filtersContainer: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: 12,
+    justifyContent: 'space-between',
+    paddingHorizontal: 5,
+    marginBottom: 15
   },
   filterButton: {
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    marginHorizontal: 6,
-    borderRadius: 20,
-    backgroundColor: 'rgba(163, 174, 133, 0.5)',
+    alignItems: 'center',
+    width: 80
   },
-  filterButtonActive: {
-    backgroundColor: 'rgba(86, 88, 28, 1)',
+  filterIcon: {
+    width: 85,
+    height: 85,
+    marginBottom: 5,
+    opacity: 0.6
+  },
+  filterIconActive: {
+    opacity: 1
   },
   filterText: {
-    color: 'rgba(86, 88, 28, 1)',
-    fontWeight: '600',
     fontSize: 14,
+    fontWeight: 'bold',
+    color: '#5D4A39',
+    textAlign: 'center'
   },
-  filterTextActive: {
-    color: '#fff',
+  activeFilterText: {
+    color: '#6d4c41'
   },
-
-  card: {
-    backgroundColor: 'rgba(163, 174, 133, 1)',
-    marginHorizontal: 16,
-    borderRadius: 8,
-    padding: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
+  videoList: {
+    flex: 1
   },
-  cardTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    textAlign: 'center',
-    marginBottom: 8,
-    color: 'rgba(86, 88, 28, 1)',
+  videoContainer: {
+    marginBottom: 25,
+    color:'#A3AE85'
   },
-  video: {
+  videoPlayer: {
     width: '100%',
     height: 200,
-    borderRadius: 4,
-    backgroundColor: 'rgba(163, 174, 133, 1)',
+    backgroundColor: '#A3AE85'
   },
-  separator: {
-    height: 8,
-    backgroundColor: 'rgba(255, 244, 229, 1)',
-    marginVertical: 10,
-    marginHorizontal: 16,
-    borderRadius: 4,
-  },
+  videoTitle: {
+    fontSize: 16,
+    marginTop: 8,
+    color: '#5D4A39',
+    textAlign: 'center'
+  }
 });
+
+export default VideoApp;

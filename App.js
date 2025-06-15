@@ -11,6 +11,7 @@ import {
   StatusBar,
   Platform,
   Modal,
+  Image
 } from 'react-native';
 import {
   NavigationContainer,
@@ -87,32 +88,81 @@ export default function App() {
   ];
 
   const Tabs = () => (
-    <Tab.Navigator
-      screenOptions={{
-        headerShown: false,
-        tabBarActiveTintColor: 'white',
-        tabBarInactiveTintColor: 'rgb(93, 74, 57)',
-        tabBarStyle: { backgroundColor: 'rgb(234, 216, 192)' },
+    
+  <Tab.Navigator
+    screenOptions={{
+      headerShown: false,
+      tabBarActiveTintColor: 'white',
+      tabBarInactiveTintColor: 'rgb(93, 74, 57)',
+      tabBarStyle: { backgroundColor: 'rgb(234, 216, 192)' },
+    }}
+  >
+    <Tab.Screen
+      name="Music"
+      component={Music}
+      options={{
+        tabBarShowLabel: false,
+        tabBarIcon: ({ focused }) => (
+          <Image 
+            source={focused 
+              ? require('./assets/icons/music_yes.png') 
+              : require('./assets/icons/music.png')}
+            style={{
+              width: focused ? 90 : 74, 
+              height: focused ? 90 : 74,
+              marginBottom: focused ? 10 : 0, 
+              resizeMode: 'contain',
+              
+            }}
+          />
+        )
       }}
-    >
-      <Tab.Screen
-        name="Music"
-        component={Music}
-        options={{ tabBarLabel: 'Музыка', tabBarIcon: () => <View /> }}
-      />
-      <Tab.Screen
-        name="MainExercises"
-        component={MainExercises}
-        options={{ tabBarLabel: 'Упражнения', tabBarIcon: () => <View /> }}
-      />
-      <Tab.Screen
-        name="Account"
-        component={Account}
-        options={{ tabBarLabel: 'Аккаунт', tabBarIcon: () => <View /> }}
-      />
-    </Tab.Navigator>
-  );
-
+    />
+    <Tab.Screen
+      name="MainExercises"
+      component={MainExercises}
+      options={{
+        tabBarShowLabel: false,
+        tabBarIcon: ({ focused }) => (
+          <Image 
+            source={focused 
+              ? require('./assets/icons/lotos.png') 
+              : require('./assets/icons/lotos_none.png')}
+            style={{
+              width: focused ? 90 : 74, 
+              height: focused ? 90 : 74,
+              marginBottom: focused ? 10 : 0, 
+              resizeMode: 'contain',
+            }}
+          />
+        )
+      }}
+    />
+    <Tab.Screen
+      name="Account"
+      component={Account}
+      options={{
+        tabBarShowLabel: false,
+        tabBarIcon: ({ focused }) => (
+          <Image 
+            source={focused 
+              ? require('./assets/icons/user_yes.png') 
+              : require('./assets/icons/user.png')}
+            style={{
+            
+              width: focused ? 90 : 74, // Активная иконка больше
+              height: focused ? 90 : 74,
+              marginBottom: focused ? 10 : 0, // Сдвигаем вниз для визуального выделения
+              resizeMode: 'contain',
+              
+            }}
+          />
+        )
+      }}
+    />
+    
+  </Tab.Navigator>
+);
   const isYogaScreen = currentRouteName === 'YogaEkb';
 
   return (
@@ -203,15 +253,16 @@ export default function App() {
         >
           <View style={styles.modalOverlay}>
             <View style={styles.modalContent}>
-              <Text style={styles.modalTitle}>Уведомление о безопасности</Text>
-              <Text style={styles.modalBody}>
-                Ыаы я текст, напишите меня
+              <Text style={[styles.modalTitle, {textAlign: 'center' }]}>Уведомление о безопасности</Text>
+              <Text style={[styles.modalBody, { textAlign: 'center' }]}>
+                Перед началом занятий проконсультируйтесь с врачом, избегайте перегрузок и выполняйте разминку! При дискомфорте - остановитесь. Используйте нескользящий коврик
+                и занимайтесь в безопасном пространстве. Практикуйте осознанно!
               </Text>
               <TouchableOpacity
                 style={styles.modalButton}
                 onPress={() => setModalVisible(false)}
               >
-                <Text style={styles.modalButtonText}>Понятно</Text>
+                <Text style={styles.modalButtonText}>Хорошо</Text>
               </TouchableOpacity>
             </View>
           </View>
