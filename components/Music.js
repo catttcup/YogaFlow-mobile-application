@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet, ImageBackground } from 'react-native';
+import { View, Text, TouchableOpacity, Image, StyleSheet, ImageBackground, ScrollView  } from 'react-native';
 import { Audio } from 'expo-av';
 
 const tracks = [
@@ -80,14 +80,15 @@ export default function MusicScreen() {
   }, [sound]);
 
   return (
-    <View style={styles.container}>
-     
-      
-      {/* Главная кнопка включения с фоновым изображением */}
-      <View style={styles.mainPlayContainer}>
+  <ScrollView 
+    style={styles.container}
+    contentContainerStyle={styles.scrollContent}
+  >
+    {/* Главная кнопка включения */}
+     <View style={styles.mainPlayContainer}>
         <TouchableOpacity onPress={toggleMainPlay}>
           <ImageBackground 
-            source={require('../assets/audio_screensaver/wheat.png')} // Замените на нужное изображение
+            source={require('../assets/audio_screensaver/wheat.png')} 
             style={styles.mainPlayBackground}
             imageStyle={styles.mainPlayImage}
           >
@@ -101,8 +102,8 @@ export default function MusicScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* Список треков */}
-      <View style={styles.tracksContainer}>
+    {/* Список треков */}
+    <View style={styles.tracksContainer}>
         {tracks.map(track => (
           <View key={track.id} style={styles.trackItem}>
             <Image source={track.icon} style={styles.trackIcon} />
@@ -126,15 +127,19 @@ export default function MusicScreen() {
           </View>
         ))}
       </View>
-    </View>
-  );
-}
+    </ScrollView>
+);
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
     backgroundColor: '#FFF4E5'
+  },
+   scrollContent: {
+    padding: 2,
+    paddingBottom: 40 // Добавьте отступ снизу
   },
   header: {
     fontSize: 24,
@@ -150,7 +155,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden'
   },
   mainPlayBackground: {
-    width: '100%',
+    width: 400,
     height: 150,
     justifyContent: 'center',
     alignItems: 'center'

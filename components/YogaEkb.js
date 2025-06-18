@@ -17,7 +17,6 @@ export default function MainCards() {
       subtitle: 'Группы в VK для занятия йогой в Екатеринбурге',
       image: require('./vkk.jpg'),
       links: [
-        'https://vk.me/join/OtfCMsEt3L9GOJ_lEdWS6mdKFG/MPHlctW8=',
         'https://vk.com/sunkalpa_ekb',
         'https://vk.com/sostoyaniesoznaniyglavnoe',
         'https://vk.com/grani.yoga',

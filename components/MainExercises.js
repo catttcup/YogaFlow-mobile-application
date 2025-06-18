@@ -12,17 +12,18 @@ const VideoApp = () => {
     { id: 'Утро', label: 'Утро', icon: require('../assets/icons/relax.png') },
     { id: 'Вечер', label: 'Вечер', icon: require('../assets/icons/focus.png') },
     { id: 'Растяжка', label: 'Растяжка', icon: require('../assets/icons/anxious.png') }
+    
   ];
 
   // Данные для видео
   const videoContent = {
     'Все': [
       { id: '1', title: "Утренняя медитация", source: require('../components/video1.mp4') },
-      { id: '2', title: "Дыхательные практики", source: require('../components/video2.mp4') },
-      { id: '3', title: "Вечерний релакс", source: require('../components/video3.mp4') }
+      { id: '2', title: "Растяжка для начинающих", source: require('../components/video2.mp4') },
+      { id: '3', title: "Вечерний йога", source: require('../components/video3.mp4') }
     ],
     'Утро': [
-      { id: '4', title: "Утренний комплекс", source: require('../components/video1.mp4') }
+      { id: '4', title: "Утренняя медитация", source: require('../components/video1.mp4') }
     ],
     'Вечер': [
       { id: '5', title: "Вечерняя йога", source: require('../components/video2.mp4') }
@@ -81,8 +82,9 @@ const VideoApp = () => {
               source={video.source}
               style={styles.videoPlayer}
               useNativeControls
-              resizeMode={ResizeMode.CONTAIN}
+              resizeMode={ResizeMode.COVER}
               shouldPlay={false}
+              hardwareAcceleration={false} 
             />
             <Text style={styles.videoTitle}>{video.title}</Text>
           </View>
@@ -104,15 +106,15 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 24,
     fontWeight: 'bold',
-    textAlign: 'center',
+    textAlign: 'left',
     marginBottom: 5,
     color: '#5D4A39'
   },
   subheader: {
     fontSize: 16,
-    textAlign: 'center',
+    textAlign: 'left',
     color: '#5D4A39',
-    marginBottom: 20
+    marginBottom: 1
   },
   divider: {
     height: 1,
@@ -122,16 +124,16 @@ const styles = StyleSheet.create({
   filtersContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 5,
-    marginBottom: 15
+    paddingHorizontal: -10,
+    marginBottom: 1
   },
   filterButton: {
     alignItems: 'center',
     width: 80
   },
   filterIcon: {
-    width: 85,
-    height: 85,
+    width: 73,
+    height: 73,
     marginBottom: 5,
     opacity: 0.6
   },
@@ -151,14 +153,19 @@ const styles = StyleSheet.create({
     flex: 1
   },
   videoContainer: {
-    marginBottom: 25,
-    color:'#A3AE85'
-  },
+  marginBottom: 25,
+  borderRadius: 8, // Скругление углов
+  overflow: 'hidden', // Чтобы видео не выходило за границы
+  elevation: 3, // Тень на Android (опционально)
+  shadowColor: '#000', // Тень на iOS
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.1,
+},
   videoPlayer: {
-    width: '100%',
-    height: 200,
-    backgroundColor: '#A3AE85'
-  },
+  width: '100%',
+  height: 200,
+  //backgroundColor: 'black', // Фон до загрузки видео
+},
   videoTitle: {
     fontSize: 16,
     marginTop: 8,

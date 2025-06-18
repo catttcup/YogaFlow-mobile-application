@@ -253,13 +253,18 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    textAlign: 'center',
+    textAlign: 'left',
     marginBottom: 10,
+    сolor: '#5D4A39',
+    fontWeight: 'bold',
+    
   },
   monthTitle: {
     fontSize: 20,
     textAlign: 'center',
     marginBottom: 10,
+    сolor: '#5D4A39',
+    
   },
   weekHeader: {
     flexDirection: 'row',
@@ -289,7 +294,7 @@ const styles = StyleSheet.create({
   },
   dayText: {
     fontSize: DAY_FONT_SIZE,
-    color: '#000',
+    color: '#5D4A39',
   },
   countersContainer: {
     marginTop: 10,
@@ -318,7 +323,7 @@ const styles = StyleSheet.create({
   },
   counterText: {
     fontSize: 14,
-    color: '#333',
+    color: '#5D4A39',
   },
   modalOverlay: {
     flex: 1,
