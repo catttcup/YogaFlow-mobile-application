@@ -85,6 +85,10 @@ const VideoApp = () => {
               resizeMode={ResizeMode.COVER}
               shouldPlay={false}
               hardwareAcceleration={false} 
+               isLooping={false}
+              isMuted={false}
+              rate={1.0}
+              volume={1.0}
             />
             <Text style={styles.videoTitle}>{video.title}</Text>
           </View>
@@ -157,7 +161,7 @@ const styles = StyleSheet.create({
   borderRadius: 8, // Скругление углов
   overflow: 'hidden', // Чтобы видео не выходило за границы
   elevation: 3, // Тень на Android (опционально)
-  shadowColor: '#000', // Тень на iOS
+  shadowColor: '#A3AE85',
   shadowOffset: { width: 0, height: 2 },
   shadowOpacity: 0.1,
 },
